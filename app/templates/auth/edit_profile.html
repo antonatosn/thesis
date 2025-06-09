@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - SafeDrive Insurance{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0"><i class="fas fa-user-edit me-2"></i> Edit Profile</h2>
+        </div>
+        <div class="card-body">
+          <p class="lead mb-4">Update your personal information below.</p>
+          
+          <form method="post">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" id="first_name" value="{{ g.user.first_name }}" required>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="last_name" id="last_name" value="{{ g.user.last_name }}" required>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" name="email" id="email" value="{{ g.user.email }}" required>
+            </div>
+            
+            <div class="mb-4">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" name="phone" id="phone" value="{{ g.user.phone }}" required>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i> Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

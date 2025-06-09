@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Vehicle - SafeDrive Ireland{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0"><i class="fas fa-car me-2"></i> Add a New Vehicle</h2>
+        </div>
+        <div class="card-body">
+          <p class="lead mb-4">Please provide details about your vehicle to get accurate insurance quotes.</p>
+          
+          <form method="post">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="make" class="form-label">Make</label>
+                <input type="text" class="form-control" name="make" id="make" required placeholder="e.g., Volkswagen, Toyota, Hyundai">
+              </div>
+              
+              <div class="col-md-6">
+                <label for="model" class="form-label">Model</label>
+                <input type="text" class="form-control" name="model" id="model" required placeholder="e.g., Golf, Tucson, Octavia">
+              </div>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="year" class="form-label">Year</label>
+                <input type="number" class="form-control" name="year" id="year" required min="1900" max="2024" placeholder="e.g., 2020">
+              </div>
+              
+              <div class="col-md-4">
+                <label for="license_plate" class="form-label">Registration Number</label>
+                <input type="text" class="form-control" name="license_plate" id="license_plate" required placeholder="e.g., 192-D-12345">
+              </div>
+              
+              <div class="col-md-4">
+                <label for="vehicle_value" class="form-label">Vehicle Value (€)</label>
+                <input type="number" class="form-control" name="vehicle_value" id="vehicle_value" required min="0" placeholder="e.g., 15000">
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label for="mileage" class="form-label">Current Kilometres</label>
+              <input type="number" class="form-control" name="mileage" id="mileage" required min="0" placeholder="e.g., 25000">
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i> Add Vehicle</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div class="mt-4 text-center">
+        <p class="text-muted"><i class="fas fa-info-circle me-1"></i> After adding your vehicle, you'll be able to get personalized insurance quotes.</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

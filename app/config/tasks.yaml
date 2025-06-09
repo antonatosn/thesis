@@ -1,0 +1,4 @@
+customer_support_task:
+  description: "Respond to the following user message: {user_message}"
+  agent: customer_support_agent # This name must match the agent key in agents.yaml
+  expected_output: "A helpful and accurate response to the user's message, tailored to their authentication status."

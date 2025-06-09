@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Insurance Quotes - SafeDrive Insurance{% endblock %}
+
+{% block content %}
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{{ url_for('main.profile') }}">My Profile</a></li>
+          <li class="breadcrumb-item active">Insurance Quotes</li>
+        </ol>
+      </nav>
+      
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">Insurance Quotes for Your Vehicle</h2>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h4 class="mb-3">{{ car.make }} {{ car.model }} ({{ car.year }})</h4>
+              <p><strong>License Plate:</strong> {{ car.license_plate }}</p>
+              <p><strong>Vehicle Value:</strong> €{{ car.vehicle_value }}</p>
+              <p><strong>Mileage:</strong> {{ car.mileage }} km</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <div class="mb-3">
+                <a href="{{ url_for('main.edit_car', id=car.id) }}" class="btn btn-outline-primary">
+                  <i class="fas fa-edit me-2"></i> Edit Vehicle
+                </a>
+              </div>
+              <p class="text-muted"><i class="fas fa-info-circle me-1"></i> These quotes are personalized based on your vehicle details.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="mb-4">Personalized Insurance Plans</h3>
+      
+      <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        {% for quote in quotes %}
+          <div class="col">
+            <div class="card h-100 shadow-sm {% if quote.coverage_type == 'premium' %}border-primary{% endif %}">
+              {% if quote.coverage_type == 'premium' %}
+                <div class="card-header bg-primary text-white">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{{ quote.product_name }}</h4>
+                    <span class="badge bg-white text-primary">RECOMMENDED</span>
+                  </div>
+                </div>
+              {% else %}
+                <div class="card-header">
+                  <h4 class="mb-0">{{ quote.product_name }}</h4>
+                </div>
+              {% endif %}
+              
+              <div class="card-body">
+                <div class="mb-3">
+                  <p class="card-text">{{ quote.description }}</p>
+                </div>
+                
+                <h5 class="mb-3">Coverage Features:</h5>
+                <ul class="list-group list-group-flush mb-3">
+                  {% for feature in quote.features %}
+                    <li class="list-group-item bg-transparent">
+                      <i class="fas fa-check-circle text-success me-2"></i> {{ feature }}
+                    </li>
+                  {% endfor %}
+                </ul>
+                
+                <div class="text-center mb-3">
+                  <span class="h2">€{{ quote.price }}</span> <span class="text-muted">/year</span>
+                </div>
+                
+                <form action="{{ url_for('main.save_quote') }}" method="post">
+                  <input type="hidden" name="car_id" value="{{ car.id }}">
+                  <input type="hidden" name="product_id" value="{{ quote.product_id }}">
+                  <input type="hidden" name="price" value="{{ quote.price }}">
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-bookmark me-2"></i> Save Quote
+                    </button>
+                    <a href="#" class="btn btn-outline-primary">
+                      <i class="fas fa-info-circle me-2"></i> More Details
+                    </a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="card bg-light mb-4">
+        <div class="card-body">
+          <h5><i class="fas fa-calculator me-2"></i> How We Calculate Your Irish Motor Quote</h5>
+          <p>Your personalized quote is based on the following Irish insurance factors:</p>
+          <ul>
+            <li><strong>Vehicle value:</strong> Higher value vehicles typically have higher premiums due to repair or replacement costs under Irish market conditions.</li>
+            <li><strong>Vehicle age:</strong> In the Irish market, older vehicles often have higher premiums due to increased risk, while newer vehicles with better safety features may qualify for discounts.</li>
+            <li><strong>Annual kilometers:</strong> Higher mileage indicates more time on Irish roads and potentially increased risk exposure.</li>
+            <li><strong>Cover type:</strong> From basic Third Party Only to full Comprehensive cover, the level of protection influences your premium.</li>
+            <li><strong>No Claims Bonus:</strong> Your years of claim-free driving can significantly reduce your premium in Ireland.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left me-2"></i> Back to Profile
+        </a>
+        <a href="{{ url_for('main.add_car') }}" class="btn btn-outline-primary ms-2">
+          <i class="fas fa-car me-2"></i> Add Another Vehicle
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
