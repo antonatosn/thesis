@@ -1,8 +1,10 @@
 # Use an official Python runtime as a parent image
-FROM python:3.12-slim
+FROM python:3.12
 
 # Set working directory inside the container
 WORKDIR /app
+
+RUN pip install --upgrade pip
 
 # Copy requirements first to leverage Docker cache
 COPY requirements.txt .

@@ -4,12 +4,14 @@ import os
 from crewai import LLM, Agent, Crew, Task
 from crewai.process import Process
 from crewai.project import CrewBase, agent, crew, task
+from crewai_tools import FileReadTool
 
 from app.db_tool import DatabaseTool
 
 BaseURL = os.environ.get('AI_BASE_URL', 'https://www.google.com')
 AI_api_key = os.environ.get('AI_API_KEY', 'your_api_key_here')
 Model= os.environ.get('AI_MODEL', 'anthropic/claude-3-7-sonnet-20250219')
+FileRead = FileReadTool(file_path='/app/app/personal_data.txt')
 
 @CrewBase
 class AgentCrew:
@@ -19,10 +21,8 @@ class AgentCrew:
 
     llm = LLM(
         model=Model,
-        timeout=10,
         api_base=BaseURL,
         api_key=AI_api_key,
-        max_retries=3,
     )
 
     @agent
@@ -30,7 +30,7 @@ class AgentCrew:
         """Create a customer support representative agent."""
         return Agent(
             config=self.agents_config['customer_support_agent'],
-            tools=[DatabaseTool()],
+            tools=[FileRead],
             llm=self.llm,
             verbose=True
         )  # type: ignore
