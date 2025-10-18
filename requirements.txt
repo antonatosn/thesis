@@ -10,5 +10,5 @@ Markupsafe>=3.0.2
 itsdangerous>=2.2.0
 click>=8.1.8
 blinker>=1.9.0
-crewai>=0.140.0
-crewai-tools>=0.49.0
+crewai>=0.203.1
+crewai-tools>=0.76.0

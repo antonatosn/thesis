@@ -4,14 +4,21 @@ import os
 from crewai import LLM, Agent, Crew, Task
 from crewai.process import Process
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import FileReadTool
+from crewai_tools import FileReadTool, MCPServerAdapter
 
-from app.db_tool import DatabaseTool
+import app
+from app.ai_tools.database import UnsafeDatabaseQueryTool
+from app.ai_tools.db_tool import DatabaseTool
 
 BaseURL = os.environ.get('AI_BASE_URL', 'https://www.google.com')
 AI_api_key = os.environ.get('AI_API_KEY', 'your_api_key_here')
 Model= os.environ.get('AI_MODEL', 'anthropic/claude-3-7-sonnet-20250219')
 FileRead = FileReadTool(file_path='/app/app/personal_data.txt')
+Database = DatabaseTool()
+Raw_Database = UnsafeDatabaseQueryTool(
+    db=app.db,
+    app=app.create_app(),
+)  # type: ignore
 
 @CrewBase
 class AgentCrew:
@@ -30,7 +37,7 @@ class AgentCrew:
         """Create a customer support representative agent."""
         return Agent(
             config=self.agents_config['customer_support_agent'],
-            tools=[FileRead],
+            tools=[FileRead, Database, Raw_Database],
             llm=self.llm,
             verbose=True
         )  # type: ignore

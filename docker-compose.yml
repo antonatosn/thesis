@@ -31,3 +31,13 @@ services:
              flask db upgrade &&
              flask seed &&
              python app.py"
+
+  mcp_server:
+    build: ./mcp_server
+    container_name: mcp_server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
