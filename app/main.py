@@ -9,7 +9,6 @@ from app.auth import login_required
 from app.models import Car, InsuranceProduct, Quote
 
 bp = Blueprint('main', __name__)
-AGENT = chat.AgentCrew().create_crew()
 
 
 @bp.route('/')
@@ -279,31 +278,12 @@ def save_quote():
     return redirect(url_for('main.profile'))
 
 
-@bp.route("/chat", methods=('POST',))
-def chat_ai() -> Response:
-    """
-    Handles chatAI interactions by processing user messages and generating responses.
+@bp.route("/chat", methods=["POST"])
+def chat_with_agent():
+    """Chat with the agent."""
+    user_message = request.json.get("message", "")
+    if not user_message:
+        return jsonify({"response": "Please provide a message."}), 400
 
-    This function retrieves a user message from the incoming JSON request, processes
-    it using the `customer_rep` chat model, and returns the generated response in a
-    JSON format. It also includes user authentication context.
-
-    Returns:
-        Response: A JSON response containing the generated reply to the user's message.
-    """
-    user_message = request.json.get("message", "") if request.json else ""
-    
-    # Check user authentication status and prepare context
-    if g.user is not None:
-        user_context = f"AUTHENTICATED USER: {g.user.username} (ID: {g.user.id}, Name: {g.user.first_name} {g.user.last_name})"
-        full_message = f"{user_context}\n\nUser message: {user_message}"
-    else:
-        user_context = "GUEST USER: Not logged in"
-        full_message = f"{user_context}\n\nUser message: {user_message}"
-    
-    # add user message with context to Task
-    response = AGENT.kickoff(
-        inputs={"user_message": full_message})  # Process with CrewAI
-    return jsonify({"response": response.raw}) if response else Response(
-        "No response generated.", status=500
-    )
+    response = chat.run_chat(user_message)
+    return jsonify({"response": response})
